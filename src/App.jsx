@@ -13,6 +13,22 @@ import './index.css';
 function App() {
   const { header, about, experience, education, skills, services, projects, contact } = portfolioData;
   const [selectedImage, setSelectedImage] = useState(null);
+  const [tooltip, setTooltip] = useState({ show: false, text: '', x: 0, y: 0 });
+
+  const handleMouseEnter = (e, text) => {
+    const rect = e.target.getBoundingClientRect();
+    let x = rect.left + rect.width / 2;
+    const tooltipWidth = 250; // estimate max width
+    
+    if (x < tooltipWidth / 2 + 16) x = tooltipWidth / 2 + 16;
+    if (x > window.innerWidth - tooltipWidth / 2 - 16) x = window.innerWidth - tooltipWidth / 2 - 16;
+    
+    setTooltip({ show: true, text, x, y: rect.top - 10 });
+  };
+
+  const handleMouseLeave = () => {
+    setTooltip(t => ({ ...t, show: false }));
+  };
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
@@ -101,7 +117,13 @@ function App() {
                         <p style={{fontSize: "0.85rem", color: "var(--text-muted)", marginBottom: "0.75rem", fontWeight: 500}}>Výběr z absolvovaných předmětů:</p>
                         <div className="skills-row">
                           {edu.subjects.map(s => (
-                            <span key={s.abbr} className="mini-skill subject-skill" data-tooltip={`${s.name}\n\n${s.desc}`}>
+                            <span 
+                              key={s.abbr} 
+                              className="mini-skill subject-skill" 
+                              onMouseEnter={(e) => handleMouseEnter(e, `${s.name}\n\n${s.desc}`)}
+                              onMouseLeave={handleMouseLeave}
+                              onClick={(e) => handleMouseEnter(e, `${s.name}\n\n${s.desc}`)}
+                            >
                               {s.abbr}
                             </span>
                           ))}
@@ -135,9 +157,11 @@ function App() {
                       {job.role} <span className="timeline-company">· {job.company}</span>
                     </h4>
                     <p className="timeline-desc">{job.description}</p>
-                    <div className="skills-row">
-                      {skills.slice(0, 5).map(s => <span key={s} className="mini-skill">{s}</span>)}
-                    </div>
+                    {job.technologies && (
+                      <div className="skills-row">
+                        {job.technologies.map(tech => <span key={tech} className="mini-skill">{tech}</span>)}
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))}
@@ -225,6 +249,14 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* Global Tooltip */}
+      <div 
+        className={`global-tooltip ${tooltip.show ? 'visible' : ''}`}
+        style={{ left: tooltip.x, top: tooltip.y }}
+      >
+        {tooltip.text}
+      </div>
     </div>
   );
 }

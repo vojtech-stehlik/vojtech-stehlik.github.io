@@ -12,7 +12,8 @@ export const portfolioData = {
       period: "5/2025 - 6/2026",
       company: "ServerZone, s.r.o.",
       role: "Fullstack Developer",
-      description: "Tvorba REST API systémů převážně v jazyce PHP, návrh databázových schémat, řešení problému vyhledávání chráněného obsahu v audiovizuálních materiálech, práce na unixových systémech."
+      description: "Tvorba REST API systémů převážně v jazyce PHP, návrh databázových schémat, řešení problému vyhledávání chráněného obsahu v audiovizuálních materiálech, práce na unixových systémech.",
+      technologies: ["PHP", "Content Id", "REST API", "SQL", "Unix", "RabbitMQ", "docker", "git", "lxc"]
     }
   ],
   education: [

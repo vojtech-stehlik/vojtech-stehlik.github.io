@@ -464,16 +464,13 @@ section {
 }
 
 .subject-skill {
-  position: relative;
   cursor: help;
 }
 
-.subject-skill::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
+/* Global Tooltip */
+.global-tooltip {
+  position: fixed;
+  transform: translate(-50%, -100%) translateY(10px);
   width: max-content;
   max-width: 250px;
   background: #1e293b;
@@ -484,8 +481,8 @@ section {
   border: 1px solid rgba(255, 255, 255, 0.1);
   opacity: 0;
   visibility: hidden;
-  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  z-index: 10;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 9999;
   text-align: center;
   box-shadow: 0 10px 25px rgba(0,0,0,0.5);
   pointer-events: none;
@@ -494,10 +491,10 @@ section {
   line-height: 1.4;
 }
 
-.subject-skill:hover::after {
+.global-tooltip.visible {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(0);
+  transform: translate(-50%, -100%) translateY(0);
 }
 
 /* Responsive */
