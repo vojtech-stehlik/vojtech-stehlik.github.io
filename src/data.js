@@ -87,7 +87,7 @@ export const portfolioData = {
     {
       id: 2,
       title: "Fotografie",
-      description: "Profesionální focení portrétů, produktů nebo událostí. Zachycení jedinečné atmosféry a emocí skrz objektiv."
+      description: "Rád své projekty obohatím vlastními fotografiemi. Mimo fotografií na web se rád domluvím i na focení koncertů a jiných akcí."
     }
   ],
   contact: {
