@@ -93,6 +93,6 @@ export const portfolioData = {
   contact: {
     email: "stehliik.vojtech@gmail.com",
     linkedin: "https://www.linkedin.com/in/vojt%C4%9Bch-stehl%C3%ADk-8558b5315/",
-    github: "https://github.com/VixikHD/"
+    github: "https://github.com/vojtech-stehlik/"
   }
 };
