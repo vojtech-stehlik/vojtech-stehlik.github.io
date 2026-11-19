@@ -1,7 +1,7 @@
 export const portfolioData = {
   header: {
     name: "Vojtěch Stehlík",
-    title: "IT specialista · Softwarové inženýrství",
+    title: "IT specialista · Softwarový inženýr",
   },
   about: {
     text: "Jsem student magisterského programu na FIT ČVUT, pocházím z Příbrami a mezi mé koníčky patří hra na elektrickou kytaru. Při práci si zakládám na spolehlivosti, nasazení a dotahování věcí do konce. Baví mě technický návrh systémů, databáze a DevOps, ale stejně tak i práce s lidmi, konzultace a vedení projektů."
