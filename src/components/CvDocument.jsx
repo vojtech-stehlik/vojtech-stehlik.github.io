@@ -1,5 +1,5 @@
 import React, { forwardRef, useMemo } from 'react';
-import { Mail, Globe, Code2 } from 'lucide-react';
+import { Mail, Globe, Code2, ExternalLink } from 'lucide-react';
 import { CvBackgroundDesign } from './CvBackgroundDesign';
 
 function formatLinkLabel(url) {
@@ -174,6 +174,11 @@ export const CvDocument = forwardRef(function CvDocument(
     return result;
   }, [skills, experience, projects]);
 
+  const websiteShort = useMemo(() => {
+    if (!contact?.website) return '';
+    return formatLinkLabel(contact.website);
+  }, [contact?.website]);
+
   const linkedinShort = useMemo(() => {
     if (!contact?.linkedin) return '';
     return 'linkedin.com/in/vojtech-stehlik';
@@ -230,16 +235,43 @@ export const CvDocument = forwardRef(function CvDocument(
                   <span>{contact.email}</span>
                 </div>
               )}
+              {contact.website && (
+                <div className="cv-contact-row" style={{ color: p.sidebarText }}>
+                  <Globe size={12} color={p.sidebarHeading} className="cv-contact-icon" />
+                  <a
+                    href={contact.website}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ color: 'inherit', textDecoration: 'none' }}
+                  >
+                    {websiteShort}
+                  </a>
+                </div>
+              )}
               {contact.github && (
                 <div className="cv-contact-row" style={{ color: p.sidebarText }}>
                   <Code2 size={12} color={p.sidebarHeading} className="cv-contact-icon" />
-                  <span>{githubShort}</span>
+                  <a
+                    href={contact.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ color: 'inherit', textDecoration: 'none' }}
+                  >
+                    {githubShort}
+                  </a>
                 </div>
               )}
               {contact.linkedin && (
                 <div className="cv-contact-row" style={{ color: p.sidebarText }}>
-                  <Globe size={12} color={p.sidebarHeading} className="cv-contact-icon" />
-                  <span>{linkedinShort}</span>
+                  <ExternalLink size={12} color={p.sidebarHeading} className="cv-contact-icon" />
+                  <a
+                    href={contact.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ color: 'inherit', textDecoration: 'none' }}
+                  >
+                    {linkedinShort}
+                  </a>
                 </div>
               )}
             </div>
