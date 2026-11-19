@@ -9,20 +9,20 @@ export const portfolioData = {
   experience: [
     {
       id: 1,
+      period: "5/2025 - 6/2026",
+      company: "ServerZone s.r.o.",
+      role: "Fullstack Developer",
+      description: "Tvorba REST API systémů převážně v jazyce PHP, návrh databázových schémat, řešení problému vyhledávání chráněného obsahu v audiovizuálních materiálech, práce na unixových systémech.",
+      technologies: ["PHP", "Content Id", "REST API", "SQL", "Unix", "RabbitMQ", "docker", "git", "CI/CD", "lxc"]
+    },
+    {
+      id: 2,
       period: "9/2024 - 6/2025",
       company: "Jagu s.r.o",
       role: "Frontend Developer",
       description: "Návrh frontendové části eshopu pro reklamace a vratky, práce v týmu.",
       technologies: ["Vue.js", "CI/CD", "REST API", "Vuetify"]
     },
-    {
-      id: 2,
-      period: "5/2025 - 6/2026",
-      company: "ServerZone s.r.o.",
-      role: "Fullstack Developer",
-      description: "Tvorba REST API systémů převážně v jazyce PHP, návrh databázových schémat, řešení problému vyhledávání chráněného obsahu v audiovizuálních materiálech, práce na unixových systémech.",
-      technologies: ["PHP", "Content Id", "REST API", "SQL", "Unix", "RabbitMQ", "docker", "git", "CI/CD", "lxc"]
-    }
   ],
   education: [
     {
@@ -47,7 +47,17 @@ export const portfolioData = {
         { abbr: "PHP", name: "Webové aplikace", desc: "Tvorba backendu a dynamických webových systémů v PHP" },
         { abbr: "KOT", name: "Vývoj v Kotlinu", desc: "Programování v jazyce Kotlin" }
       ]
-    }
+    },
+    {
+      id: 2,
+      period: "9/2022 - 6/2026",
+      school: "Gymnázium Příbram",
+      degree: "Obor: Gymnázium",
+      title: "Ukončeno maturitní zkouškou z Českého jazyka, Anglického jazyka,\n" +
+          "matematiky a informatiky",
+      subjects: null
+    },
+
   ],
   projects: [
     {
@@ -78,18 +88,19 @@ export const portfolioData = {
   skills: [
     "Kotlin", "Java", "Spring Boot", "React", "PHP", "SQL", "HTML", "Graphic Design"
   ],
-  services: [
-    {
-      id: 1,
-      title: "Webový vývoj",
-      description: "Tvorba moderních, rychlých a responzivních webových aplikací na míru, od návrhu REST API a databáze až po vyladěný frontend."
-    },
-    {
-      id: 2,
-      title: "Fotografie",
-      description: "Rád své projekty obohatím vlastními fotografiemi. Mimo fotografií na web se rád domluvím i na focení koncertů a jiných akcí."
-    }
-  ],
+  services: [],
+  // services: [
+  //   {
+  //     id: 1,
+  //     title: "Webový vývoj",
+  //     description: "Tvorba moderních, rychlých a responzivních webových aplikací na míru, od návrhu REST API a databáze až po vyladěný frontend."
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Fotografie",
+  //     description: "Rád své projekty obohatím vlastními fotografiemi. Mimo fotografií na web se rád domluvím i na focení koncertů a jiných akcí."
+  //   }
+  // ],
   contact: {
     email: "stehliik.vojtech@gmail.com",
     linkedin: "https://www.linkedin.com/in/vojt%C4%9Bch-stehl%C3%ADk-8558b5315/",
