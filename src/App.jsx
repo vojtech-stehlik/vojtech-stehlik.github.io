@@ -4,19 +4,22 @@ import {
   Mail, 
   Code2,
   Camera,
-  ExternalLink
+  ExternalLink,
+  FileDown
 } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { portfolioData } from './data';
+import { CvPreviewModal } from './components/CvPreviewModal';
 import './index.css';
 
 function App() {
-  const { header, about, experience, education, skills, services, projects, contact } = portfolioData;
+  const { header, about, experience, education, services, projects, contact } = portfolioData;
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isCvModalOpen, setIsCvModalOpen] = useState(false);
   const [tooltip, setTooltip] = useState({ show: false, text: '', x: 0, y: 0 });
 
   const handleMouseEnter = (e, text) => {
-    const rect = e.target.getBoundingClientRect();
+    const rect = e.currentTarget.getBoundingClientRect();
     let x = rect.left + rect.width / 2;
     const tooltipWidth = 250; // estimate max width
     
@@ -66,7 +69,9 @@ function App() {
               <a href="#education"><span className="nav-line"></span> Vzdělání</a>
               <a href="#experience"><span className="nav-line"></span> Zkušenosti</a>
               <a href="#projects"><span className="nav-line"></span> Projekty</a>
-              <a href="#services"><span className="nav-line"></span> Služby</a>
+              {services && services.length > 0 && (
+                <a href="#services"><span className="nav-line"></span> Služby</a>
+              )}
             </motion.nav>
 
             <motion.div variants={fadeIn} className="social-links">
@@ -85,6 +90,16 @@ function App() {
                   <FaGithub size={22} />
                 </a>
               )}
+              <button
+                type="button"
+                className="social-icon-btn"
+                onClick={() => setIsCvModalOpen(true)}
+                onMouseEnter={(e) => handleMouseEnter(e, 'Stáhnout CV (PDF)')}
+                onMouseLeave={handleMouseLeave}
+                aria-label="Stáhnout CV (PDF)"
+              >
+                <FileDown size={22} />
+              </button>
             </motion.div>
           </motion.div>
         </header>
@@ -207,35 +222,37 @@ function App() {
           </motion.section>
 
           {/* Služby */}
-          <motion.section 
-            id="services"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div variants={fadeIn} className="section-header">
-              <h3 className="section-title">Služby</h3>
-            </motion.div>
-            
-            <div className="services-grid">
-              {services.map((service, i) => (
-                <motion.a 
-                  href={`mailto:${contact.email}?subject=Zájem o službu: ${service.title}`} 
-                  variants={fadeIn} 
-                  key={service.id} 
-                  className="service-card group"
-                  style={{textDecoration: 'none'}}
-                >
-                  <div className="service-icon-wrapper">
-                    {i === 0 ? <Code2 className="icon" size={28} /> : <Camera className="icon" size={28} />}
-                  </div>
-                  <h4 className="service-name">{service.title}</h4>
-                  <p className="service-desc">{service.description}</p>
-                </motion.a>
-              ))}
-            </div>
-          </motion.section>
+          {services && services.length > 0 && (
+            <motion.section 
+              id="services"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
+            >
+              <motion.div variants={fadeIn} className="section-header">
+                <h3 className="section-title">Služby</h3>
+              </motion.div>
+              
+              <div className="services-grid">
+                {services.map((service, i) => (
+                  <motion.a 
+                    href={`mailto:${contact.email}?subject=Zájem o službu: ${service.title}`} 
+                    variants={fadeIn} 
+                    key={service.id} 
+                    className="service-card group"
+                    style={{textDecoration: 'none'}}
+                  >
+                    <div className="service-icon-wrapper">
+                      {i === 0 ? <Code2 className="icon" size={28} /> : <Camera className="icon" size={28} />}
+                    </div>
+                    <h4 className="service-name">{service.title}</h4>
+                    <p className="service-desc">{service.description}</p>
+                  </motion.a>
+                ))}
+              </div>
+            </motion.section>
+          )}
 
         </main>
       </div>
@@ -257,6 +274,13 @@ function App() {
       >
         {tooltip.text}
       </div>
+
+      {/* CV Preview & PDF Export Modal */}
+      <CvPreviewModal
+        isOpen={isCvModalOpen}
+        onClose={() => setIsCvModalOpen(false)}
+        data={portfolioData}
+      />
     </div>
   );
 }
