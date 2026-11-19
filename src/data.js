@@ -1,10 +1,10 @@
 export const portfolioData = {
   header: {
     name: "Vojtěch Stehlík",
-    title: "Fullstack Vývojář & Softwarový Inženýr",
+    title: "IT specialista · Softwarové inženýrství",
   },
   about: {
-    text: "Mým cílem je doručovat kompletně dotažené projekty s důrazem na funkčnost, estetiku a otevřenou komunikaci. Rád se učím nové věci a pomáhám s celkovou realizací tak, aby byl výsledek pro klienta bez starostí a na co nejvyšší úrovni."
+    text: "Jsem student magisterského programu na FIT ČVUT, pocházím z Příbrami a mezi mé koníčky patří hra na elektrickou kytaru. Při práci si zakládám na spolehlivosti, nasazení a dotahování věcí do konce. Baví mě technický návrh systémů, databáze a DevOps, ale stejně tak i práce s lidmi, konzultace a vedení projektů."
   },
   experience: [
     {

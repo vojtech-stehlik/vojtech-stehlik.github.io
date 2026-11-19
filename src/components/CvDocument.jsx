@@ -124,17 +124,8 @@ export const CvDocument = forwardRef(function CvDocument(
   const { header, about, experience, education, skills, projects, contact } = data;
   const p = getPalette(theme);
 
-  // Deduplicate additional technologies mentioned across experience & projects
-  const ecosystemTools = useMemo(() => {
-    const coreLower = new Set(skills.map((s) => s.toLowerCase()));
-    const seen = new Set();
-    const result = [];
-
-    const candidates = [
-      ...experience.flatMap((job) => job.technologies || []),
-      ...projects.flatMap((proj) => proj.technologies || []),
-    ];
-
+  // Combine core skills and tools from experience/projects into one deduplicated list (Varianta A)
+  const unifiedSkills = useMemo(() => {
     const normalizeLabel = (raw) => {
       const trimmed = raw.trim();
       const lower = trimmed.toLowerCase();
@@ -144,18 +135,43 @@ export const CvDocument = forwardRef(function CvDocument(
       if (lower === 'type script') return 'TypeScript';
       if (lower === 'ffmpeg') return 'FFmpeg';
       if (lower === 'pgvector') return 'pgvector';
+      if (lower === 'unix') return 'Unix / Linux';
       return trimmed;
     };
+
+    const excluded = new Set(['content id', 'html', 'vuetify', 'graphic design']);
+    const prioritized = [
+      'SQL',
+      'REST API',
+      'Docker',
+      'CI/CD',
+      'Unix / Linux',
+      'Git',
+      'RabbitMQ',
+      'MySQL',
+      'pgvector',
+    ];
+
+    const candidates = [
+      ...prioritized,
+      ...skills,
+      ...experience.flatMap((job) => job.technologies || []),
+      ...projects.flatMap((proj) => proj.technologies || []),
+    ];
+
+    const seen = new Set();
+    const result = [];
 
     for (const raw of candidates) {
       const label = normalizeLabel(raw);
       const key = label.toLowerCase();
-      if (!coreLower.has(key) && !seen.has(key) && key !== 'content id') {
+      if (!seen.has(key) && !excluded.has(key)) {
         seen.add(key);
         result.push(label);
       }
     }
-    return result.slice(0, 14);
+
+    return result;
   }, [skills, experience, projects]);
 
   const linkedinShort = useMemo(() => {
@@ -242,16 +258,16 @@ export const CvDocument = forwardRef(function CvDocument(
             </p>
           </div>
 
-          {/* Klíčové dovednosti */}
+          {/* Dovednosti & technologie (sjednocená sekce bez duplicit) */}
           <div className="cv-side-block">
             <h3
               className="cv-side-heading"
               style={{ color: p.sidebarHeading, borderBottomColor: p.sidebarDivider }}
             >
-              Klíčové dovednosti
+              Dovednosti & technologie
             </h3>
             <div className="cv-side-skills-grid">
-              {skills.map((skill) => (
+              {unifiedSkills.map((skill) => (
                 <span
                   key={skill}
                   className="cv-side-chip"
@@ -265,19 +281,6 @@ export const CvDocument = forwardRef(function CvDocument(
                 </span>
               ))}
             </div>
-          </div>
-
-          {/* Technologie & Nástroje */}
-          <div className="cv-side-block">
-            <h3
-              className="cv-side-heading"
-              style={{ color: p.sidebarHeading, borderBottomColor: p.sidebarDivider }}
-            >
-              Technologie & Nástroje
-            </h3>
-            <p className="cv-side-tools" style={{ color: p.sidebarMuted }}>
-              {ecosystemTools.join(' · ')}
-            </p>
           </div>
         </aside>
 
@@ -293,97 +296,7 @@ export const CvDocument = forwardRef(function CvDocument(
             </p>
           </header>
 
-          {/* Pracovní zkušenosti */}
-          <section className="cv-section">
-            <div className="cv-section-head">
-              <h2 className="cv-section-title" style={{ color: p.mainHeading }}>
-                Pracovní zkušenosti
-              </h2>
-              <div className="cv-section-rule" style={{ backgroundColor: p.mainHeadingRule }} />
-            </div>
-
-            <div className="cv-entries">
-              {experience.map((job) => (
-                <article
-                  key={job.id}
-                  className="cv-entry-card"
-                  style={{
-                    backgroundColor: p.cardBg,
-                    borderColor: p.cardBorder,
-                  }}
-                >
-                  <div className="cv-entry-top">
-                    <div className="cv-entry-headline">
-                      <span className="cv-entry-title" style={{ color: p.mainTitle }}>
-                        {job.role}
-                      </span>
-                      <span className="cv-entry-sep" style={{ color: p.mainMuted }}>
-                        ·
-                      </span>
-                      <span className="cv-entry-org" style={{ color: p.accent }}>
-                        {job.company}
-                      </span>
-                    </div>
-                    <span className="cv-entry-date" style={{ color: p.dateText }}>
-                      {job.period}
-                    </span>
-                  </div>
-                  <p className="cv-entry-desc" style={{ color: p.mainText }}>
-                    {job.description}
-                  </p>
-                  {job.technologies && job.technologies.length > 0 && (
-                    <div className="cv-entry-tech" style={{ color: p.techText }}>
-                      {job.technologies.join(' · ')}
-                    </div>
-                  )}
-                </article>
-              ))}
-            </div>
-          </section>
-
-          {/* Vybrané projekty */}
-          <section className="cv-section">
-            <div className="cv-section-head">
-              <h2 className="cv-section-title" style={{ color: p.mainHeading }}>
-                Vybrané projekty
-              </h2>
-              <div className="cv-section-rule" style={{ backgroundColor: p.mainHeadingRule }} />
-            </div>
-
-            <div className="cv-entries">
-              {projects.map((project) => (
-                <article
-                  key={project.id}
-                  className="cv-entry-card"
-                  style={{
-                    backgroundColor: p.cardBg,
-                    borderColor: p.cardBorder,
-                  }}
-                >
-                  <div className="cv-entry-top">
-                    <span className="cv-entry-title" style={{ color: p.mainTitle }}>
-                      {project.title}
-                    </span>
-                    {project.link && project.link !== '#' && (
-                      <span className="cv-entry-link" style={{ color: p.accent }}>
-                        {formatLinkLabel(project.link)}
-                      </span>
-                    )}
-                  </div>
-                  <p className="cv-entry-desc" style={{ color: p.mainText }}>
-                    {project.description}
-                  </p>
-                  {project.technologies && project.technologies.length > 0 && (
-                    <div className="cv-entry-tech" style={{ color: p.techText }}>
-                      {project.technologies.join(' · ')}
-                    </div>
-                  )}
-                </article>
-              ))}
-            </div>
-          </section>
-
-          {/* Vzdělání */}
+          {/* 1. Vzdělání */}
           <section className="cv-section">
             <div className="cv-section-head">
               <h2 className="cv-section-title" style={{ color: p.mainHeading }}>
@@ -435,6 +348,96 @@ export const CvDocument = forwardRef(function CvDocument(
                           .map((s) => `${s.name} (${s.abbr})`)
                           .join(' · ')}
                       </div>
+                    </div>
+                  )}
+                </article>
+              ))}
+            </div>
+          </section>
+
+          {/* 2. Pracovní zkušenosti */}
+          <section className="cv-section">
+            <div className="cv-section-head">
+              <h2 className="cv-section-title" style={{ color: p.mainHeading }}>
+                Pracovní zkušenosti
+              </h2>
+              <div className="cv-section-rule" style={{ backgroundColor: p.mainHeadingRule }} />
+            </div>
+
+            <div className="cv-entries">
+              {experience.map((job) => (
+                <article
+                  key={job.id}
+                  className="cv-entry-card"
+                  style={{
+                    backgroundColor: p.cardBg,
+                    borderColor: p.cardBorder,
+                  }}
+                >
+                  <div className="cv-entry-top">
+                    <div className="cv-entry-headline">
+                      <span className="cv-entry-title" style={{ color: p.mainTitle }}>
+                        {job.role}
+                      </span>
+                      <span className="cv-entry-sep" style={{ color: p.mainMuted }}>
+                        ·
+                      </span>
+                      <span className="cv-entry-org" style={{ color: p.accent }}>
+                        {job.company}
+                      </span>
+                    </div>
+                    <span className="cv-entry-date" style={{ color: p.dateText }}>
+                      {job.period}
+                    </span>
+                  </div>
+                  <p className="cv-entry-desc" style={{ color: p.mainText }}>
+                    {job.description}
+                  </p>
+                  {job.technologies && job.technologies.length > 0 && (
+                    <div className="cv-entry-tech" style={{ color: p.techText }}>
+                      {job.technologies.join(' · ')}
+                    </div>
+                  )}
+                </article>
+              ))}
+            </div>
+          </section>
+
+          {/* 3. Vybrané projekty */}
+          <section className="cv-section">
+            <div className="cv-section-head">
+              <h2 className="cv-section-title" style={{ color: p.mainHeading }}>
+                Vybrané projekty
+              </h2>
+              <div className="cv-section-rule" style={{ backgroundColor: p.mainHeadingRule }} />
+            </div>
+
+            <div className="cv-entries">
+              {projects.map((project) => (
+                <article
+                  key={project.id}
+                  className="cv-entry-card"
+                  style={{
+                    backgroundColor: p.cardBg,
+                    borderColor: p.cardBorder,
+                  }}
+                >
+                  <div className="cv-entry-top">
+                    <span className="cv-entry-title" style={{ color: p.mainTitle }}>
+                      {project.title}
+                    </span>
+                    {project.link && project.link !== '#' && (
+                      <span className="cv-entry-link" style={{ color: p.accent }}>
+                        {formatLinkLabel(project.link)}
+                      </span>
+                    )}
+                  </div>
+                  <p className="cv-entry-desc" style={{ color: p.mainText }}>
+                    {project.description}
+                  </p>
+                  {project.technologies && project.technologies.length > 0 && (
+                    <div className="cv-entry-tech" style={{ color: p.techText }}>
+                      {project.technologies.join(' · ')}
                     </div>
                   )}
                 </article>
